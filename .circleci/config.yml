@@ -33,7 +33,7 @@ jobs:
     docker:
       - image: cimg/node:18.17.0
     steps:
-      - attack_workspace:
+      - attach_workspace:
           at: ~/project/workspace
       - checkout
       - run:
@@ -45,7 +45,7 @@ jobs:
     docker:
       - image: cimg/node:18.17.0
     steps:
-      - attack_workspace:
+      - attach_workspace:
           at: ~/project/workspace
       - checkout
       - run:
@@ -60,7 +60,7 @@ jobs:
     docker:
       - image: cimg/node:18.17.0
     steps:
-      - attack_workspace:
+      - attach_workspace:
           at: ~/project/workspace
       - checkout
       - run:
