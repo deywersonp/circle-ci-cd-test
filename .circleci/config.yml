@@ -15,6 +15,7 @@ jobs:
           name: Install Dependencies
           command: npm install
       - run: npm install --save-dev firebase-tools
+      - run: npm install --save-dev vitest
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
