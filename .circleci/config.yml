@@ -23,8 +23,8 @@ jobs:
       - run:
           name: Build application
           command: npm run build
-      -persist_to_workspace:
-          root: workspace 
+      - persist_to_workspace:
+          root: workspace
           paths:
             - .
 
