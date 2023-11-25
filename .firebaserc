@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "circle-ci-cd-test"
+    "staging": "circle-ci-cd-test-staging",
+    "production": "circle-ci-cd-test"
   }
 }

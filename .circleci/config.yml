@@ -20,15 +20,64 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: Build application for production
+          name: Build application
           command: npm run build
+      - store_artifacts:
+          path: build
+
+  test:
+    working_directory: ~/project
+    docker:
+      - image: cimg/node:18.17.0
+    steps:
+      - checkout
+      - attach_artifacts: at build
+      - run:
+          name: Execute automated tests
+          command: npm run test
+
+  deploy-to-staging:
+    working_directory: ~/project
+    docker:
+      - image: cimg/node:18.17.0
+    steps:
+      - checkout
+      - attach_artifacts: at build
       - run:
           name: Enable Firebase webframeworks
           command: ./node_modules/.bin/firebase experiments:enable webframeworks
       - run:
-          name: Deploy app to Firebase
-          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN
+          name: Deploy app to Firebase staging environment
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --project staging
+
+  deploy-to-production:
+    working_directory: ~/project
+    docker:
+      - image: cimg/node:18.17.0
+    steps:
+      - checkout
+      - attach_artifacts: at build
+      - run:
+          name: Enable Firebase webframeworks
+          command: ./node_modules/.bin/firebase experiments:enable webframeworks
+      - run:
+          name: Deploy app to Firebase production environment
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --project production
+
 workflows:
-  build-and-deploy:
+  build-test-stage-approve-deploy:
     jobs:
       - build
+      - test:
+          requires:
+            - build
+      - deploy-to-staging:
+          requires:
+            - test
+      - wait-approval:
+          type: approval
+          requires:
+            - deploy-to-staging
+      - deploy-to-production:
+          requires:
+            - wait-approval
