@@ -24,7 +24,7 @@ jobs:
           name: Build application
           command: npm run build
       - persist_to_workspace:
-          root: workspace
+          root: .
           paths:
             - .
 
@@ -34,7 +34,7 @@ jobs:
       - image: cimg/node:18.17.0
     steps:
       - attach_workspace:
-          at: ~/project/workspace
+          at: .
       - checkout
       - run:
           name: Execute automated tests
@@ -46,7 +46,7 @@ jobs:
       - image: cimg/node:18.17.0
     steps:
       - attach_workspace:
-          at: ~/project/workspace
+          at: .
       - checkout
       - run:
           name: Enable Firebase webframeworks
@@ -61,7 +61,7 @@ jobs:
       - image: cimg/node:18.17.0
     steps:
       - attach_workspace:
-          at: ~/project/workspace
+          at: .
       - checkout
       - run:
           name: Enable Firebase webframeworks
